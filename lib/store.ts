@@ -4,11 +4,7 @@ import { persist } from "zustand/middleware";
 
 export interface CartItem extends ProductType {
   count: number;
-  expectCoins: number;
 }
-
-export const FREE_SHIPPING_THRESHOLD = 499.99; // Valor em BRL
-export const SHIPPING_PRICE = 29.99; // Valor em BRL
 
 export type CartStore = {
   cart: CartItem[];
@@ -18,9 +14,6 @@ export type CartStore = {
   incrementItem: (id: string) => void;
   decrementItem: (id: string) => void;
   setItemCount: (id: string, count: number) => void;
-  count: () => number;
-  shippingPrice: () => number;
-  remainingForFreeShipping: () => number;
   subtotalPrice: () => number;
   totalPrice: () => number;
 };
@@ -73,19 +66,14 @@ export const useCartStore = create<CartStore>()(
         }
         return 0;
       },
-      shippingPrice: () => {
-        return get().subtotalPrice() >= FREE_SHIPPING_THRESHOLD
-          ? 0
-          : SHIPPING_PRICE;
-      },
-      remainingForFreeShipping: () => {
-        return get().subtotalPrice() >= FREE_SHIPPING_THRESHOLD
-          ? 0
-          : FREE_SHIPPING_THRESHOLD - get().subtotalPrice();
-      },
       totalPrice: () => {
-        const { shippingPrice } = get();
-        return get().subtotalPrice() + shippingPrice();
+        const { cart } = get();
+        if (cart.length) {
+          return cart
+            .map((item) => item.price * item.count)
+            .reduce((a, b) => a + b);
+        }
+        return 0;
       },
     }),
     { name: "cart-storage" }
@@ -110,7 +98,6 @@ const addToCart = (cart: CartItem[], product: ProductType): CartItem[] => {
     {
       ...product,
       count: 1,
-      expectCoins: product.price * 0.1,
       colors: product.colors,
     },
   ];

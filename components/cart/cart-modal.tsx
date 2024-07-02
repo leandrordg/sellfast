@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 
 import { RemoveItemCart } from "@/components/cart/remove-item-cart";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import {
   Sheet,
   SheetClose,
@@ -19,20 +18,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ChevronRightIcon, ShoppingCartIcon, TruckIcon } from "lucide-react";
+import { ChevronRightIcon, ShoppingCartIcon } from "lucide-react";
 
 export function CartModal() {
-  const {
-    cart,
-    subtotalPrice,
-    incrementItem,
-    decrementItem,
-    remainingForFreeShipping,
-  } = useCartStore();
-
-  const FREE_SHIPPING_THRESHOLD = 499.99;
-  const freeShippingRemainingPercentage =
-    (remainingForFreeShipping() / FREE_SHIPPING_THRESHOLD) * 100;
+  const { cart, subtotalPrice, incrementItem, decrementItem } = useCartStore();
 
   return (
     <Sheet>
@@ -60,29 +49,6 @@ export function CartModal() {
               : "Confira os produtos adicionados ao carrinho."}
           </SheetDescription>
         </SheetHeader>
-
-        {cart.length > 0 && (
-          <div className="px-6 text-primary text-sm flex flex-col gap-4">
-            {remainingForFreeShipping() === 0 ? (
-              <p>
-                <TruckIcon className="inline-block mr-2 size-4" />
-                Parabéns! Você ganhou FRETE GRÁTIS.
-              </p>
-            ) : (
-              <p>
-                <TruckIcon className="inline-block mr-2 size-4" />
-                Adicione mais{" "}
-                {remainingForFreeShipping().toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}{" "}
-                para FRETE GRÁTIS
-              </p>
-            )}
-
-            <Progress value={100 - freeShippingRemainingPercentage} />
-          </div>
-        )}
 
         <div className="grow overflow-y-auto space-y-6 p-6">
           <div className="flex flex-col gap-4">
@@ -149,7 +115,8 @@ export function CartModal() {
                   })}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Frete e impostos calculados no checkout.
+                  Avance para o checkout para concluír a compra e escolher a
+                  forma de pagamento.
                 </p>
               </div>
               <SheetClose asChild>

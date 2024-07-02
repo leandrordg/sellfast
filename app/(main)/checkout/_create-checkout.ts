@@ -2,12 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import {
-  CartItem,
-  FREE_SHIPPING_THRESHOLD,
-  SHIPPING_PRICE,
-  useCartStore,
-} from "@/lib/store";
+import { CartItem, FREE_SHIPPING_THRESHOLD, SHIPPING_PRICE } from "@/lib/store";
 import { stripe } from "@/lib/stripe";
 import { checkRole } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
@@ -25,14 +20,6 @@ export const createCheckout = async (cart: CartItem[]) => {
     return { error: "Seu carrinho está vazio!" };
   }
 
-  const allPrices = cart.reduce(
-    (acc, item) => acc + item.price * item.count,
-    0
-  );
-
-  const shippingPrice =
-    allPrices > FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_PRICE;
-
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: cart.map((item) => ({
@@ -48,7 +35,7 @@ export const createCheckout = async (cart: CartItem[]) => {
             color: item.colors[0].name,
           },
         },
-        unit_amount: (item.price + shippingPrice) * 100,
+        unit_amount: item.price * 100,
       },
       quantity: item.count,
     })),

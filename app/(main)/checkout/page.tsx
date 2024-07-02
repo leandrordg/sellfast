@@ -11,7 +11,7 @@ import { CheckoutForm } from "./_components/checkout-form";
 import { CheckoutSummary } from "./_components/checkout-summary";
 
 export default function Page() {
-  const { count } = useCartStore();
+  const { cart } = useCartStore();
 
   const { user, isLoaded } = useUser();
 
@@ -30,7 +30,7 @@ export default function Page() {
           </div>
           <div className="py-20 lg:p-10 bg-muted animate-pulse rounded-lg md:min-w-72 lg:min-w-96" />
         </div>
-      ) : count() > 0 ? (
+      ) : cart.length > 0 ? (
         <div className="flex flex-col md:flex-row gap-10">
           {/* @ts-ignore */}
           <CheckoutForm user={user} />
