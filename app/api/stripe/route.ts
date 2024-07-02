@@ -30,12 +30,11 @@ export async function POST(req: Request) {
         },
       });
 
-      // implement method to clear cart
-
       break;
     }
     default: {
       console.log(`[STRIPE] Unhandled event type: ${event.type}`);
+      break;
     }
   }
 

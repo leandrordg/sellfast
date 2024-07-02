@@ -4,16 +4,13 @@ import { redirect } from "next/navigation";
 
 import { CartItem } from "@/lib/store";
 import { stripe } from "@/lib/stripe";
-import { checkRole } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 
 export const createCheckout = async (cart: CartItem[]) => {
   const { userId } = auth();
 
-  const isAdmin = checkRole("owner" || "admin");
-
-  if (!isAdmin || !userId) {
-    return { error: "Você não tem permissão para isso!" };
+  if (!userId) {
+    return { error: "Você precisa estar logado para finalizar a compra!" };
   }
 
   if (cart.length === 0 || !cart) {

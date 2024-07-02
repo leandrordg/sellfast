@@ -25,10 +25,8 @@ export function CheckoutSummary({ user }: Props) {
     setIsLoading(true);
 
     await createCheckout(cart).then(() => {
-      setTimeout(() => {
-        setIsLoading(false);
-        removeAll();
-      }, 1000);
+      setIsLoading(false);
+      removeAll();
     });
   };
 
