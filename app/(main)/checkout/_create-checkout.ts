@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { CartItem, FREE_SHIPPING_THRESHOLD, SHIPPING_PRICE } from "@/lib/store";
+import { CartItem } from "@/lib/store";
 import { stripe } from "@/lib/stripe";
 import { checkRole } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
