@@ -1,5 +1,6 @@
-import { db } from "@/lib/db";
 import Stripe from "stripe";
+
+import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
   const body = await req.text();
